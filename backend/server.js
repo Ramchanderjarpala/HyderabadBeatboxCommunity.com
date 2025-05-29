@@ -26,11 +26,11 @@ app.use('/api/gallery', galleryRoutes);
 app.use('/api/videos', videoRoutes);
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../dist')));
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 // Catch-all route handler
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/index.html'));
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
 const PORT = process.env.PORT || 5000;

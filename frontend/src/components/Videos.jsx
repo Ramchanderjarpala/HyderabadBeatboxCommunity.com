@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Play, X } from 'lucide-react';
-import axios from 'axios';
-import Section from './Section';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Play, X } from "lucide-react";
+import axios from "axios";
+import Section from "./Section";
 
 function Videos() {
   const [selectedVideo, setSelectedVideo] = useState(null);
@@ -14,10 +14,12 @@ function Videos() {
 
   const fetchVideos = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/videos');
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/videos`
+      );
       setVideos(data);
     } catch (error) {
-      console.error('Error fetching videos:', error);
+      console.error("Error fetching videos:", error);
     }
   };
 
@@ -34,13 +36,13 @@ function Videos() {
               onClick={() => setSelectedVideo(video)}
             >
               <div className="relative overflow-hidden rounded-xl aspect-video">
-                <img 
-                  src={video.thumbnail} 
+                <img
+                  src={video.thumbnail}
                   alt={video.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all duration-300" />
-                <motion.div 
+                <motion.div
                   className="absolute inset-0 flex items-center justify-center"
                   initial={{ opacity: 0 }}
                   whileHover={{ opacity: 1 }}

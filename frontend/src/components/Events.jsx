@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Calendar, Users, Clock, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import axios from 'axios';
+import axios from "axios";
 import Section from "./Section";
 
 function CountdownTimer({ targetDate }) {
@@ -142,10 +142,12 @@ function Events() {
 
   const fetchEvents = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/events');
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/events`
+      );
       setEvents(data);
     } catch (error) {
-      console.error('Error fetching events:', error);
+      console.error("Error fetching events:", error);
     }
   };
 

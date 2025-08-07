@@ -1,8 +1,8 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
-import axios from 'axios';
-import Section from './Section';
+import React, { useRef, useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
+import axios from "axios";
+import Section from "./Section";
 
 function Gallery() {
   const scrollRef = useRef(null);
@@ -20,10 +20,12 @@ function Gallery() {
 
   const fetchImages = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/gallery');
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/gallery`
+      );
       setImages(data);
     } catch (error) {
-      console.error('Error fetching images:', error);
+      console.error("Error fetching images:", error);
     }
   };
 
@@ -41,7 +43,7 @@ function Gallery() {
         if (timestamp - lastTimestamp >= 16) {
           const maxScroll = gallery.scrollWidth - gallery.offsetWidth;
           currentPosition += speed * scrollDirection;
-          
+
           if (currentPosition >= maxScroll) {
             setScrollDirection(-1);
             currentPosition = maxScroll;
@@ -52,9 +54,9 @@ function Gallery() {
 
           gallery.scrollTo({
             left: currentPosition,
-            behavior: 'smooth'
+            behavior: "smooth",
           });
-          
+
           lastTimestamp = timestamp;
         }
       }
@@ -70,9 +72,9 @@ function Gallery() {
       setTimeout(() => setAutoScroll(true), 4000);
     };
 
-    gallery.addEventListener('wheel', handleWheel, { passive: false });
+    gallery.addEventListener("wheel", handleWheel, { passive: false });
     return () => {
-      gallery.removeEventListener('wheel', handleWheel);
+      gallery.removeEventListener("wheel", handleWheel);
       cancelAnimationFrame(animationFrameId);
     };
   }, [autoScroll, scrollDirection]);
@@ -107,7 +109,9 @@ function Gallery() {
 
   return (
     <Section id="gallery" className="py-32">
-      <h2 className="text-5xl font-bold mb-16 text-center gradient-text">Gallery</h2>
+      <h2 className="text-5xl font-bold mb-16 text-center gradient-text">
+        Gallery
+      </h2>
       <div
         ref={scrollRef}
         className="overflow-x-scroll scrollbar-hide"
@@ -115,9 +119,9 @@ function Gallery() {
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
         onMouseMove={handleMouseMove}
-        style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+        style={{ cursor: isDragging ? "grabbing" : "grab" }}
       >
-        <div className="flex space-x-8 px-8" style={{ width: 'max-content' }}>
+        <div className="flex space-x-8 px-8" style={{ width: "max-content" }}>
           {images.map((image) => (
             <motion.div
               key={image._id}

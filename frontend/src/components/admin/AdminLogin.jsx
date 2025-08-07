@@ -1,31 +1,36 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function AdminLogin() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('http://localhost:5000/api/admin/login', {
-        username,
-        password,
-      });
-      localStorage.setItem('adminToken', data.token);
-      navigate('/admin/dashboard');
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/admin/login`,
+        {
+          username,
+          password,
+        }
+      );
+      localStorage.setItem("adminToken", data.token);
+      navigate("/admin/dashboard");
     } catch (error) {
-      setError('Invalid credentials');
+      setError("Invalid credentials");
     }
   };
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <div className="max-w-md w-full space-y-8 p-8 bg-gray-900 rounded-xl">
-        <h2 className="text-3xl font-bold text-center text-white">Admin Login</h2>
+        <h2 className="text-3xl font-bold text-center text-white">
+          Admin Login
+        </h2>
         {error && <p className="text-red-500 text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -58,4 +63,4 @@ function AdminLogin() {
   );
 }
 
-export default AdminLogin
+export default AdminLogin;

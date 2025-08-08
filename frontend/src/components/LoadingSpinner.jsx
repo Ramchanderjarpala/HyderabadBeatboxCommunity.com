@@ -17,8 +17,7 @@ const LoadingSpinner = ({ size = "medium" }) => {
     interval = setInterval(() => {
       setDisplayText(() => {
         if (iteration > finalText.length) {
-          clearInterval(interval);
-          return finalText;
+          iteration = 0;
         }
 
         const newText = finalText.slice(0, iteration);

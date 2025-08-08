@@ -132,9 +132,12 @@ function EventModal({ event, onClose }) {
   );
 }
 
+import LoadingSpinner from "./LoadingSpinner";
+
 function Events() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchEvents();
@@ -148,6 +151,8 @@ function Events() {
       setEvents(data);
     } catch (error) {
       console.error("Error fetching events:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -164,24 +169,32 @@ function Events() {
           <CountdownTimer targetDate="2025-03-23T16:00:00" />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {events.map((event) => (
-            <motion.button
-              key={event._id}
-              className="bg-[#111] rounded-lg p-6 text-left hover:bg-[#222] transition-colors cursor-pointer border border-white/10 hover:border-[#0066FF]/50 w-full"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setSelectedEvent(event)}
-            >
-              <Calendar className="w-12 h-12 text-[#0066FF] flex-shrink-0" />
-              <h3 className="text-lg font-semibold mt-4 mb-2">{event.title}</h3>
-              <div className="flex items-center text-[#0066FF] text-sm">
-                <Clock className="w-4 h-4 mr-2 flex-shrink-0" />
-                <span className="truncate">{event.date}</span>
-              </div>
-            </motion.button>
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center">
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {events.map((event) => (
+              <motion.button
+                key={event._id}
+                className="bg-[#111] rounded-lg p-6 text-left hover:bg-[#222] transition-colors cursor-pointer border border-white/10 hover:border-[#0066FF]/50 w-full"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setSelectedEvent(event)}
+              >
+                <Calendar className="w-12 h-12 text-[#0066FF] flex-shrink-0" />
+                <h3 className="text-lg font-semibold mt-4 mb-2">
+                  {event.title}
+                </h3>
+                <div className="flex items-center text-[#0066FF] text-sm">
+                  <Clock className="w-4 h-4 mr-2 flex-shrink-0" />
+                  <span className="truncate">{event.date}</span>
+                </div>
+              </motion.button>
+            ))}
+          </div>
+        )}
 
         <AnimatePresence>
           {selectedEvent && (

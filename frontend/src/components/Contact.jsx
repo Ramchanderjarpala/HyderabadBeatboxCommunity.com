@@ -48,7 +48,7 @@ function Contact() {
             <h3 className="text-2xl font-semibold mb-8">Connect With Us</h3>
             <div className="space-y-6">
               <a
-                href="https://www.instagram.com/bbxhyd_official/?igsh=MTNvazA2eGFvbXBwaA%3D%3D#"
+                href="https://www.instagram.com/hydbeatboxcommunity/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-4 p-4 rounded-xl hover:bg-white/5 transition-colors"

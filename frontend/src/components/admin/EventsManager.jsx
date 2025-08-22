@@ -10,10 +10,17 @@ function EventsManager() {
     details: "",
     location: "",
   });
+  const [imageBase64, setImageBase64] = useState("");
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
+  // Handle file selection and convert to base64 encoded string
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => setImageBase64(reader.result);
+    }
+  };
 
   const fetchEvents = async () => {
     try {
@@ -26,6 +33,10 @@ function EventsManager() {
     }
   };
 
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -34,7 +45,11 @@ function EventsManager() {
         `${import.meta.env.VITE_BACKEND_URL}/api/events`,
         {
           ...newEvent,
-          details: newEvent.details.split("\n"),
+          details: newEvent.details
+            .split("\n")
+            .map((d) => d.trim())
+            .filter((d) => d.length > 0),
+          image: imageBase64,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -48,10 +63,13 @@ function EventsManager() {
         details: "",
         location: "",
       });
+      setImageBase64("");
     } catch (error) {
       console.error("Error creating event:", error);
     }
   };
+
+  // Removed duplicate useEffect and handleSubmit definitions
 
   const handleDelete = async (id) => {
     try {
@@ -78,6 +96,17 @@ function EventsManager() {
           placeholder="Event Title"
           className="w-full p-2 bg-gray-800 text-white rounded"
         />
+        <div>
+          <label>Event Image:</label>
+          <input type="file" accept="image/*" onChange={handleImageChange} />
+          {imageBase64 && (
+            <img
+              src={imageBase64}
+              alt="Preview"
+              style={{ width: "100px", marginTop: "10px" }}
+            />
+          )}
+        </div>
         <input
           type="text"
           value={newEvent.date}

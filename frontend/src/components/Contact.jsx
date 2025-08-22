@@ -1,5 +1,6 @@
 import React from "react";
 import { MapPin, Mail } from "lucide-react";
+
 import {
   RiDiscordLine,
   RiInstagramLine,
@@ -7,69 +8,53 @@ import {
 } from "@remixicon/react";
 import { motion } from "framer-motion";
 import Section from "./Section";
+import ReactTypingEffect from "react-typing-effect";
 
 function Contact() {
   return (
-    <Section id="contact" className="section-padding">
-      <div className="container-width">
-        <h2 className="section-title text-center">Get in Touch</h2>
-        <div className="grid md:grid-cols-2 gap-12">
-          <motion.div className="card p-8" whileHover={{ y: -10 }}>
-            <h3 className="text-2xl font-semibold mb-8">Contact Info</h3>
-            <div className="space-y-6">
-              <div className="flex items-center space-x-4">
-                <MapPin className="w-6 h-6 text-primary flex-shrink-0" />
-                <span className="text-white/80">
-                  Hyderabad, Telangana, India
-                </span>
-              </div>
-              <div className="flex items-center space-x-4">
-                <Mail className="w-6 h-6 text-primary flex-shrink-0" />
-                <a
-                  href="mailto:bbxhydofficial@gmail.com"
-                  className="text-white/80 hover:text-primary transition-colors"
-                >
-                  bbxhydofficial@gmail.com
-                </a>
-              </div>
-              <a
-                href="https://chat.whatsapp.com/DPog876RSEyFJOHhgB98Ty"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-4 hover:text-primary transition-colors"
-              >
-                <RiWhatsappLine className="w-6 h-6 text-primary flex-shrink-0" />
-                <span className="text-white/80">Join WhatsApp Group</span>
-              </a>
-            </div>
-          </motion.div>
-
-          <motion.div className="card p-8" whileHover={{ y: -10 }}>
-            <h3 className="text-2xl font-semibold mb-8">Connect With Us</h3>
-            <div className="space-y-6">
-              <a
-                href="https://www.instagram.com/hydbeatboxcommunity/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-4 p-4 rounded-xl hover:bg-white/5 transition-colors"
-              >
-                <RiInstagramLine className="w-8 h-8 text-primary" />
-                <span className="text-white/80">Follow us on Instagram</span>
-              </a>
-              <a
-                href="https://discord.gg/AjQdtMJnrR"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-4 p-4 rounded-xl hover:bg-white/5 transition-colors"
-              >
-                <RiDiscordLine className="w-8 h-8 text-primary" />
-                <span className="text-white/80">Join our Discord server</span>
-              </a>
-            </div>
-          </motion.div>
+    <footer className=" text-white flex flex-col items-center py-4">
+      <div className="px-4 flex flex-col items-center">
+        <img src="/hbx3.png" alt="BBX Icon" className="w-40 h-40 " />
+        <div className="flex space-x-6 -mt-10 mr-2  mb-2">
+          <a
+            href="https://instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white"
+          >
+            <RiInstagramLine className="w-6 h-6" />
+          </a>
+          <a
+            href="https://wa.me/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white"
+          >
+            <RiWhatsappLine className="w-6 h-6" />
+          </a>
+          <a
+            href="https://discord.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white"
+          >
+            <RiDiscordLine className="w-6 h-6" />
+          </a>
         </div>
       </div>
-    </Section>
+      <p className="mb-1 text-white/50">
+        © 2024 Hyderabad Beatbox Community. All rights reserved.
+      </p>
+      <div className="text-center text-white/40 text-[10px]">
+        <ReactTypingEffect
+          text={["Developed by X Boy"]}
+          speed={100}
+          eraseDelay={2000}
+          typingDelay={1000}
+          cursorRenderer={(cursor) => <span>{cursor}</span>}
+        />
+      </div>
+    </footer>
   );
 }
 

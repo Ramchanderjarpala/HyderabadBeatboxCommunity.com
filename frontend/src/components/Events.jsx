@@ -84,6 +84,15 @@ function EventModal({ event, onClose }) {
               <X size={24} />
             </button>
 
+            {/* Event Image as main theme */}
+            {event.image && (
+              <img
+                src={event.image}
+                alt="Event"
+                className="w-full h-64 object-cover rounded mb-6"
+              />
+            )}
+
             <div className="flex flex-col md:flex-row md:items-start gap-6">
               <div className="flex justify-center md:block">
                 <Calendar className="w-12 h-12 text-[#0066FF] flex-shrink-0" />
@@ -100,7 +109,7 @@ function EventModal({ event, onClose }) {
                   <p className="text-white/80 leading-relaxed text-sm md:text-base">
                     {event.description}
                   </p>
-                  {event.details && (
+                  {event.details && event.details.length > 0 && (
                     <div className="space-y-2">
                       <h4 className="font-semibold text-[#0066FF] text-sm md:text-base">
                         Event Details:
@@ -183,11 +192,17 @@ function Events() {
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setSelectedEvent(event)}
               >
-                <Calendar className="w-12 h-12 text-[#0066FF] flex-shrink-0" />
-                <h3 className="text-lg font-semibold mt-4 mb-2">
+                {event.image && (
+                  <img
+                    src={event.image}
+                    alt="Event"
+                    className="w-full h-48 object-cover rounded mb-4"
+                  />
+                )}
+                <h3 className="text-lg font-semibold mb-2 text-center">
                   {event.title}
                 </h3>
-                <div className="flex items-center text-[#0066FF] text-sm">
+                <div className="flex items-center justify-center text-[#0066FF] text-sm mb-2">
                   <Clock className="w-4 h-4 mr-2 flex-shrink-0" />
                   <span className="truncate">{event.date}</span>
                 </div>

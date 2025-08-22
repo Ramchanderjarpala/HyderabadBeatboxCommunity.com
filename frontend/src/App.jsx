@@ -8,6 +8,7 @@ import Events from "./components/Events";
 import Gallery from "./components/Gallery";
 import Videos from "./components/Videos";
 import Contact from "./components/Contact";
+import OurClients from "./components/OurClients";
 import AdminLogin from "./components/admin/AdminLogin";
 import AdminDashboard from "./components/admin/AdminDashboard";
 
@@ -70,8 +71,9 @@ function MainLayout() {
       <Events />
       <Gallery />
       <Videos />
+      <OurClients />
       <Contact />
-      <footer className="glass-effect py-8 px-4 text-center text-sm text-white/60">
+      {/* <footer className="glass-effect py-8 px-4 text-center text-sm text-white/60">
         <p>© 2024 Hyderabad Beatbox Community. All rights reserved.</p>
         <div className="text-center text-white/40 text-[10px]">
           <ReactTypingEffect
@@ -82,7 +84,7 @@ function MainLayout() {
             cursorRenderer={(cursor) => <span>{cursor}</span>}
           />
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 }

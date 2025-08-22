@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+
 const eventSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -17,8 +18,11 @@ const eventSchema = new mongoose.Schema({
     type: String
   }],
   location: {
+    type: String
+  },
+  image: {
     type: String,
-    required: true
+    default: ''
   }
 }, {
   timestamps: true

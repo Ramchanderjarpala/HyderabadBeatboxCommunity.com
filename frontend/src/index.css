@@ -1,4 +1,4 @@
-@tailwind base;
+                                                                                                                            @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -139,3 +139,14 @@ body::-webkit-scrollbar {
   @apply relative border-2 border-transparent;
   animation: blink 3s infinite;
 }
+
+
+/* Seamless infinite scroll for OurClients logos */
+/* .animate-scroll-banner {
+  animation: scroll-banner 20s linear infinite;
+}
+@keyframes scroll-banner {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+} */
+    

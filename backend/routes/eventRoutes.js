@@ -4,17 +4,28 @@ import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// Public routes
+// Get all events
 router.get('/', async (req, res) => {
   try {
-    const events = await Event.find({});
+    const events = await Event.find();
     res.json(events);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Failed to fetch events', error });
   }
 });
 
-// Protected routes
+// Public routes
+// Create a new event including image data in base64 format
+router.post('/', async (req, res) => {
+  const { title, description, date, image, details, location } = req.body;
+  try {
+    const event = new Event({ title, description, date, image, details, location });
+    const createdEvent = await event.save();
+    res.status(201).json(createdEvent);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to create event', error });
+  }
+});
 router.post('/', protect, async (req, res) => {
   try {
     const event = await Event.create(req.body);

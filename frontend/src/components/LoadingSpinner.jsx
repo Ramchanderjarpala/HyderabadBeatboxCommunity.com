@@ -7,7 +7,7 @@ const LoadingSpinner = ({ size = "medium" }) => {
     large: "text-lg",
   };
 
-  const finalText = "1 2 3 Beatbox!";
+  const finalText = "3 2 1 Beatbox!";
   const [displayText, setDisplayText] = useState("");
 
   useEffect(() => {

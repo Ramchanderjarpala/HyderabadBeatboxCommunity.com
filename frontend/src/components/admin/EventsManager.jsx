@@ -9,18 +9,9 @@ function EventsManager() {
     description: "",
     details: "",
     location: "",
+    image: "",
+    ticketLink: "",
   });
-  const [imageBase64, setImageBase64] = useState("");
-
-  // Handle file selection and convert to base64 encoded string
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => setImageBase64(reader.result);
-    }
-  };
 
   const fetchEvents = async () => {
     try {
@@ -49,7 +40,6 @@ function EventsManager() {
             .split("\n")
             .map((d) => d.trim())
             .filter((d) => d.length > 0),
-          image: imageBase64,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -62,8 +52,9 @@ function EventsManager() {
         description: "",
         details: "",
         location: "",
+        image: "",
+        ticketLink: "",
       });
-      setImageBase64("");
     } catch (error) {
       console.error("Error creating event:", error);
     }
@@ -96,17 +87,13 @@ function EventsManager() {
           placeholder="Event Title"
           className="w-full p-2 bg-gray-800 text-white rounded"
         />
-        <div>
-          <label>Event Image:</label>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
-          {imageBase64 && (
-            <img
-              src={imageBase64}
-              alt="Preview"
-              style={{ width: "100px", marginTop: "10px" }}
-            />
-          )}
-        </div>
+        <input
+          type="text"
+          value={newEvent.image}
+          onChange={(e) => setNewEvent({ ...newEvent, image: e.target.value })}
+          placeholder="Event Image URL"
+          className="w-full p-2 bg-gray-800 text-white rounded"
+        />
         <input
           type="text"
           value={newEvent.date}
@@ -137,6 +124,15 @@ function EventsManager() {
             setNewEvent({ ...newEvent, location: e.target.value })
           }
           placeholder="Location"
+          className="w-full p-2 bg-gray-800 text-white rounded"
+        />
+        <input
+          type="text"
+          value={newEvent.ticketLink}
+          onChange={(e) =>
+            setNewEvent({ ...newEvent, ticketLink: e.target.value })
+          }
+          placeholder="Ticket Link (Optional)"
           className="w-full p-2 bg-gray-800 text-white rounded"
         />
         <button

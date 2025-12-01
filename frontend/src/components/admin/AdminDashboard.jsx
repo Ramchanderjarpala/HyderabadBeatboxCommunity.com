@@ -1,15 +1,17 @@
-import React from 'react';
-import { Routes, Route, Link, useNavigate } from 'react-router-dom';
-import EventsManager from './EventsManager';
-import GalleryManager from './GalleryManager';
-import VideosManager from './VideosManager';
+import React from "react";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import EventsManager from "./EventsManager";
+import GalleryManager from "./GalleryManager";
+import VideosManager from "./VideosManager";
+import HomeImageManager from "./HomeImageManager";
+import BlogManager from "./BlogManager";
 
 function AdminDashboard() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('adminToken');
-    navigate('/admin');
+    localStorage.removeItem("adminToken");
+    navigate("/admin");
   };
 
   return (
@@ -46,16 +48,30 @@ function AdminDashboard() {
           >
             <h2 className="text-xl text-white">Manage Videos</h2>
           </Link>
+          <Link
+            to="home-images"
+            className="bg-gray-800 p-6 rounded-lg text-center hover:bg-gray-700"
+          >
+            <h2 className="text-xl text-white">Manage Home Images</h2>
+          </Link>
+          <Link
+            to="blogs"
+            className="bg-gray-800 p-6 rounded-lg text-center hover:bg-gray-700"
+          >
+            <h2 className="text-xl text-white">Manage Blogs</h2>
+          </Link>
         </div>
 
         <Routes>
           <Route path="events" element={<EventsManager />} />
           <Route path="gallery" element={<GalleryManager />} />
           <Route path="videos" element={<VideosManager />} />
+          <Route path="home-images" element={<HomeImageManager />} />
+          <Route path="blogs" element={<BlogManager />} />
         </Routes>
       </div>
     </div>
   );
 }
 
-export default AdminDashboard
+export default AdminDashboard;

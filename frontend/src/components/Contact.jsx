@@ -42,8 +42,9 @@ function Contact() {
           </a>
         </div>
       </div>
-      <p className="mb-1 text-white/50">
-        © 2024 Hyderabad Beatbox Community. All rights reserved.
+      <p className="mb-1 text-white/50 text-xs">
+        {`© ${new Date().getFullYear()} Hyderabad Beatbox Community. All rights
+        reserved.`}
       </p>
       <div className="text-center text-white/40 text-[10px]">
         <ReactTypingEffect

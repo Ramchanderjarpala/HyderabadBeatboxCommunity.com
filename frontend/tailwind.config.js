@@ -8,7 +8,7 @@ export default {
         'secondary': '#111111',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Lexend', 'sans-serif'],
       },
     },
   },

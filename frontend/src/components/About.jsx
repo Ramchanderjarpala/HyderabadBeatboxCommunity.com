@@ -1,7 +1,7 @@
-import React from 'react';
-import { Mic, Users, Star } from 'lucide-react';
-import { motion } from 'framer-motion';
-import Section from './Section';
+import React from "react";
+import { Mic, Users, Star } from "lucide-react";
+import { motion } from "framer-motion";
+import Section from "./Section";
 
 function About() {
   return (
@@ -13,18 +13,19 @@ function About() {
             {
               icon: <Mic className="w-8 h-8" />,
               title: "Beatboxers",
-              description: "Learn from experienced beatboxers-join the community"
+              description:
+                "Learn from experienced beatboxers-join the community",
             },
             {
               icon: <Users className="w-8 h-8" />,
               title: "Growing Community",
-              description: "30+ active members and counting"
+              description: "30+ active members and counting",
             },
             {
               icon: <Star className="w-8 h-8" />,
               title: "Regular Events",
-              description: "Weekly meetups and workshops"
-            }
+              description: "Weekly meetups and workshops",
+            },
           ].map((item, index) => (
             <motion.div
               key={index}
@@ -38,11 +39,13 @@ function About() {
           ))}
         </div>
         <div className="max-w-3xl mx-auto text-center">
-          <p className="text-lg text-white/80 leading-relaxed">
-            Welcome to Hyderabad Beatbox! Get ready to vibe with the freshest beats from Hyderabad's top beatboxers. 
-            We're bringing you electrifying performances, killer tutorials, and collabs that push the limits. 
-            The Hyderabad Beatbox Community has grown into a vibrant collective of 30+ passionate artists, 
-            bringing together beatboxers from all corners of the city.
+          <p className="text-lg text-white/80 leading-relaxed font-sans">
+            Welcome to Hyderabad Beatbox! Get ready to vibe with the freshest
+            beats from Hyderabad's top beatboxers. We're bringing you
+            electrifying performances, killer tutorials, and collabs that push
+            the limits. The Hyderabad Beatbox Community has grown into a vibrant
+            collective of 30+ passionate artists, bringing together beatboxers
+            from all corners of the city.
           </p>
         </div>
       </div>

@@ -1,21 +1,17 @@
-import React, { useRef, useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Section from "./Section";
 import LoadingSpinner from "./LoadingSpinner";
-import ImageSkeleton from "./ImageSkeleton";
+import ImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
+import { X } from "lucide-react";
+import "./Gallery.css";
 
 function Gallery() {
-  const scrollRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-  const [autoScroll, setAutoScroll] = useState(true);
-  const [scrollDirection, setScrollDirection] = useState(1);
-  const [selectedImage, setSelectedImage] = useState(null);
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showGallery, setShowGallery] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     fetchImages();
@@ -27,7 +23,12 @@ function Gallery() {
       const { data } = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/gallery`
       );
-      setImages(data);
+      const formattedImages = data.map((image) => ({
+        original: image.image,
+        thumbnail: image.image,
+        description: image.title,
+      }));
+      setImages(formattedImages);
     } catch (error) {
       console.error("Error fetching images:", error);
     } finally {
@@ -35,355 +36,90 @@ function Gallery() {
     }
   };
 
-  useEffect(() => {
-    const gallery = scrollRef.current;
-    if (!gallery) return;
-
-    let animationFrameId;
-    let speed = 0.8;
-    let currentPosition = gallery.scrollLeft;
-    let lastTimestamp = 0;
-
-    const animate = (timestamp) => {
-      if (autoScroll) {
-        if (timestamp - lastTimestamp >= 16) {
-          const maxScroll = gallery.scrollWidth - gallery.offsetWidth;
-          currentPosition += speed * scrollDirection;
-
-          if (currentPosition >= maxScroll) {
-            setScrollDirection(-1);
-            currentPosition = maxScroll;
-          } else if (currentPosition <= 0) {
-            setScrollDirection(1);
-            currentPosition = 0;
-          }
-
-          gallery.scrollTo({
-            left: currentPosition,
-            behavior: "smooth",
-          });
-
-          lastTimestamp = timestamp;
-        }
-      }
-      animationFrameId = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    const handleWheel = (e) => {
-      e.preventDefault();
-      gallery.scrollLeft += e.deltaY;
-      setAutoScroll(false);
-      setTimeout(() => setAutoScroll(true), 4000);
-    };
-
-    gallery.addEventListener("wheel", handleWheel, { passive: false });
-    return () => {
-      gallery.removeEventListener("wheel", handleWheel);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, [autoScroll, scrollDirection]);
-
-  const handleMouseDown = (e) => {
-    setIsDragging(true);
-    setStartX(e.pageX - scrollRef.current.offsetLeft);
-    setScrollLeft(scrollRef.current.scrollLeft);
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX) * 2;
-    scrollRef.current.scrollLeft = scrollLeft - walk;
-  };
-
-  const handleImageClick = (image) => {
-    setSelectedImage(image);
-    setAutoScroll(false);
-  };
-
-  const handleClosePreview = () => {
-    setSelectedImage(null);
-    setAutoScroll(true);
-  };
-
-  // Loading state with skeleton placeholders
   if (loading) {
     return (
-      <Section id="gallery" className="py-32">
-        <h2 className="text-5xl font-bold mb-16 text-center gradient-text">
+      <Section id="gallery" className="py-16 md:py-32">
+        <h2 className="text-4xl md:text-5xl font-bold mb-8 md:mb-16 text-center gradient-text">
           Gallery
         </h2>
         <div className="flex justify-center">
           <LoadingSpinner size="large" text="Loading gallery..." />
         </div>
-        <div
-          className="flex space-x-8 px-8 mt-8"
-          style={{ width: "max-content" }}
-        >
-          {[...Array(6)].map((_, index) => (
-            <ImageSkeleton key={index} />
-          ))}
-        </div>
       </Section>
     );
   }
 
+  const visibleImages = images.slice(0, 9);
+
   return (
-    <Section id="gallery" className="py-32">
-      <h2 className="text-5xl font-bold mb-16 text-center gradient-text">
+    <Section id="gallery" className="py-16 md:py-32">
+      <h2 className="text-4xl md:text-5xl font-bold mb-8 md:mb-16 text-center gradient-text">
         Gallery
       </h2>
-      <div
-        ref={scrollRef}
-        className="overflow-x-scroll scrollbar-hide"
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        onMouseMove={handleMouseMove}
-        style={{ cursor: isDragging ? "grabbing" : "grab" }}
-      >
-        <div className="flex space-x-8 px-8" style={{ width: "max-content" }}>
-          {images.map((image) => (
-            <motion.div
-              key={image._id}
-              className="relative w-[300px] h-[400px] rounded-xl overflow-hidden flex-shrink-0 cursor-pointer"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.3 }}
-              onClick={() => handleImageClick(image)}
-            >
-              <img
-                src={image.image}
-                alt={image.title}
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      <AnimatePresence>
-        {selectedImage && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
-            onClick={handleClosePreview}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-2 md:gap-4 p-4">
+        {visibleImages.map((image, index) => (
+          <div
+            key={index}
+            className="aspect-w-1 aspect-h-1 cursor-pointer"
+            onClick={() => setSelectedImage(image)}
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative max-w-5xl max-h-[90vh]"
-              onClick={(e) => e.stopPropagation()}
+            <img
+              src={image.original}
+              alt={image.description}
+              className="object-cover w-full h-full rounded-lg"
+            />
+          </div>
+        ))}
+      </div>
+      {images.length > 9 && (
+        <div className="text-center mt-8">
+          <button
+            onClick={() => setShowGallery(true)}
+            className="px-6 py-3 bg-blue-500 text-white rounded-lg"
+          >
+            View More
+          </button>
+        </div>
+      )}
+      {showGallery && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 gallery-modal">
+          <div className="relative w-full h-full max-h-screen">
+            <button
+              onClick={() => setShowGallery(false)}
+              className="absolute top-0 right-0 m-4 text-white z-10"
             >
-              <button
-                onClick={handleClosePreview}
-                className="absolute -top-12 right-0 text-white/60 hover:text-white"
-              >
-                <X size={24} />
-              </button>
-              <img
-                src={selectedImage.image}
-                alt={selectedImage.title}
-                className="w-full h-full object-contain rounded-xl"
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              <X size={32} />
+            </button>
+            <ImageGallery
+              items={images}
+              thumbnailPosition="bottom"
+              showPlayButton={false}
+            />
+          </div>
+        </div>
+      )}
+      {selectedImage && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative max-w-3xl max-h-screen p-4">
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-0 right-0 m-4 text-white"
+            >
+              <X size={32} />
+            </button>
+            <img
+              src={selectedImage.original}
+              alt={selectedImage.description}
+              className="object-contain w-full h-full"
+            />
+          </div>
+        </div>
+      )}
     </Section>
   );
 }
 
 export default Gallery;
-
-// import React, { useRef, useEffect, useState } from "react";
-// import { motion, AnimatePresence } from "framer-motion";
-// import { X } from "lucide-react";
-// import axios from "axios";
-// import Section from "./Section";
-
-// function Gallery() {
-//   const scrollRef = useRef(null);
-//   const [isDragging, setIsDragging] = useState(false);
-//   const [startX, setStartX] = useState(0);
-//   const [scrollLeft, setScrollLeft] = useState(0);
-//   const [autoScroll, setAutoScroll] = useState(true);
-//   const [scrollDirection, setScrollDirection] = useState(1);
-//   const [selectedImage, setSelectedImage] = useState(null);
-//   const [images, setImages] = useState([]);
-
-//   useEffect(() => {
-//     fetchImages();
-//   }, []);
-
-//   const fetchImages = async () => {
-//     try {
-//       const { data } = await axios.get(
-//         `${import.meta.env.VITE_BACKEND_URL}/api/gallery`
-//       );
-//       setImages(data);
-//     } catch (error) {
-//       console.error("Error fetching images:", error);
-//     }
-//   };
-
-//   useEffect(() => {
-//     const gallery = scrollRef.current;
-//     if (!gallery) return;
-
-//     let animationFrameId;
-//     let speed = 0.8;
-//     let currentPosition = gallery.scrollLeft;
-//     let lastTimestamp = 0;
-
-//     const animate = (timestamp) => {
-//       if (autoScroll) {
-//         if (timestamp - lastTimestamp >= 16) {
-//           const maxScroll = gallery.scrollWidth - gallery.offsetWidth;
-//           currentPosition += speed * scrollDirection;
-
-//           if (currentPosition >= maxScroll) {
-//             setScrollDirection(-1);
-//             currentPosition = maxScroll;
-//           } else if (currentPosition <= 0) {
-//             setScrollDirection(1);
-//             currentPosition = 0;
-//           }
-
-//           gallery.scrollTo({
-//             left: currentPosition,
-//             behavior: "smooth",
-//           });
-
-//           lastTimestamp = timestamp;
-//         }
-//       }
-//       animationFrameId = requestAnimationFrame(animate);
-//     };
-
-//     animate();
-
-//     const handleWheel = (e) => {
-//       e.preventDefault();
-//       gallery.scrollLeft += e.deltaY;
-//       setAutoScroll(false);
-//       setTimeout(() => setAutoScroll(true), 4000);
-//     };
-
-//     gallery.addEventListener("wheel", handleWheel, { passive: false });
-//     return () => {
-//       gallery.removeEventListener("wheel", handleWheel);
-//       cancelAnimationFrame(animationFrameId);
-//     };
-//   }, [autoScroll, scrollDirection]);
-
-//   const handleMouseDown = (e) => {
-//     setIsDragging(true);
-//     setStartX(e.pageX - scrollRef.current.offsetLeft);
-//     setScrollLeft(scrollRef.current.scrollLeft);
-//   };
-
-//   const handleMouseUp = () => {
-//     setIsDragging(false);
-//   };
-
-//   const handleMouseMove = (e) => {
-//     if (!isDragging) return;
-//     e.preventDefault();
-//     const x = e.pageX - scrollRef.current.offsetLeft;
-//     const walk = (x - startX) * 2;
-//     scrollRef.current.scrollLeft = scrollLeft - walk;
-//   };
-
-//   const handleImageClick = (image) => {
-//     setSelectedImage(image);
-//     setAutoScroll(false);
-//   };
-
-//   const handleClosePreview = () => {
-//     setSelectedImage(null);
-//     setAutoScroll(true);
-//   };
-
-//   return (
-//     <Section id="gallery" className="py-32">
-//       <h2 className="text-5xl font-bold mb-16 text-center gradient-text">
-//         Gallery
-//       </h2>
-//       <div
-//         ref={scrollRef}
-//         className="overflow-x-scroll scrollbar-hide"
-//         onMouseDown={handleMouseDown}
-//         onMouseUp={handleMouseUp}
-//         onMouseLeave={handleMouseUp}
-//         onMouseMove={handleMouseMove}
-//         style={{ cursor: isDragging ? "grabbing" : "grab" }}
-//       >
-//         <div className="flex space-x-8 px-8" style={{ width: "max-content" }}>
-//           {images.map((image) => (
-//             <motion.div
-//               key={image._id}
-//               className="relative w-[300px] h-[400px] rounded-xl overflow-hidden flex-shrink-0 cursor-pointer"
-//               whileHover={{ scale: 1.05 }}
-//               transition={{ duration: 0.3 }}
-//               onClick={() => handleImageClick(image)}
-//             >
-//               <img
-//                 src={image.image}
-//                 alt={image.title}
-//                 className="w-full h-full object-cover"
-//                 loading="lazy"
-//               />
-//               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-//             </motion.div>
-//           ))}
-//         </div>
-//       </div>
-
-//       <AnimatePresence>
-//         {selectedImage && (
-//           <motion.div
-//             initial={{ opacity: 0 }}
-//             animate={{ opacity: 1 }}
-//             exit={{ opacity: 0 }}
-//             className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
-//             onClick={handleClosePreview}
-//           >
-//             <motion.div
-//               initial={{ scale: 0.9, opacity: 0 }}
-//               animate={{ scale: 1, opacity: 1 }}
-//               exit={{ scale: 0.9, opacity: 0 }}
-//               className="relative max-w-5xl max-h-[90vh]"
-//               onClick={(e) => e.stopPropagation()}
-//             >
-//               <button
-//                 onClick={handleClosePreview}
-//                 className="absolute -top-12 right-0 text-white/60 hover:text-white"
-//               >
-//                 <X size={24} />
-//               </button>
-//               <img
-//                 src={selectedImage.image}
-//                 alt={selectedImage.title}
-//                 className="w-full h-full object-contain rounded-xl"
-//               />
-//             </motion.div>
-//           </motion.div>
-//         )}
-//       </AnimatePresence>
-//     </Section>
-//   );
-// }
-
-// export default Gallery;

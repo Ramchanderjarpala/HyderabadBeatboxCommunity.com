@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -10,8 +10,8 @@ function Header() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollToSection = (id) => {
@@ -22,16 +22,18 @@ function Header() {
       const offsetPosition = elementPosition + window.pageYOffset - offset;
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
     }
     setIsMobileMenuOpen(false);
   };
 
   return (
-    <header className={`fixed w-full z-50 transition-all duration-500 ${
-      isScrolled ? 'glass-effect' : 'bg-transparent'
-    }`}>
+    <header
+      className={`fixed w-full z-50 transition-all duration-500 ${
+        isScrolled ? "glass-effect" : "bg-transparent"
+      }`}
+    >
       <nav className="h-20 px-8 flex items-center justify-between">
         <motion.img
           initial={{ opacity: 0, x: -20 }}
@@ -42,7 +44,15 @@ function Header() {
         />
 
         <div className="hidden md:flex space-x-12 mr-11">
-          {['home', 'about', 'events', 'gallery', 'videos', 'contact'].map((section) => (
+          {[
+            "home",
+            "about",
+            "events",
+            "gallery",
+            "videos",
+            "blog",
+            "contact",
+          ].map((section) => (
             <button
               key={section}
               onClick={() => scrollToSection(section)}
@@ -65,12 +75,20 @@ function Header() {
         {isMobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden glass-effect"
           >
             <div className="py-4 px-4 space-y-4">
-              {['home', 'about', 'events', 'gallery', 'videos', 'contact'].map((section) => (
+              {[
+                "home",
+                "about",
+                "events",
+                "gallery",
+                "videos",
+                "blog",
+                "contact",
+              ].map((section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}

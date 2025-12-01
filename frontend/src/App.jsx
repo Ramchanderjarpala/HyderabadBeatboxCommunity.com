@@ -9,26 +9,38 @@ import Gallery from "./components/Gallery";
 import Videos from "./components/Videos";
 import Contact from "./components/Contact";
 import OurClients from "./components/OurClients";
+import Blog from "./components/Blog";
+import WriteBlog from "./components/WriteBlog";
+import BlogDetail from "./components/BlogDetail";
 import AdminLogin from "./components/admin/AdminLogin";
 import AdminDashboard from "./components/admin/AdminDashboard";
+import axios from "axios";
 
 function ImageCarousel() {
   const [currentImage, setCurrentImage] = React.useState(0);
-  const images = [
-    "/home1.webp",
-    "/home2.webp",
-    "/home3.webp",
-    "/home4.webp",
-    "/Home5.webp",
-    "/Home6.webp",
-  ];
+  const [images, setImages] = React.useState([]);
 
   React.useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/home-images`
+        );
+        setImages(data.map((image) => image.image));
+      } catch (error) {
+        console.error("Error fetching images:", error);
+      }
+    };
+    fetchImages();
+  }, []);
+
+  React.useEffect(() => {
+    if (images.length === 0) return;
     const timer = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % images.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [images]);
 
   return (
     <div id="home" className="relative h-screen overflow-hidden">
@@ -72,6 +84,7 @@ function MainLayout() {
       <Gallery />
       <Videos />
       <OurClients />
+      <Blog />
       <Contact />
       {/* <footer className="glass-effect py-8 px-4 text-center text-sm text-white/60">
         <p>© 2024 Hyderabad Beatbox Community. All rights reserved.</p>
@@ -97,6 +110,9 @@ function App() {
         <Route path="*" element={<MainLayout />} />
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin/dashboard/*" element={<AdminDashboard />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:id" element={<BlogDetail />} />
+        <Route path="/write-blog" element={<WriteBlog />} />
       </Routes>
     </Router>
   );

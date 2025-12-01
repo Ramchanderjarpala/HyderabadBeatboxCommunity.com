@@ -131,6 +131,18 @@ function EventModal({ event, onClose }) {
                       </p>
                     </div>
                   )}
+                  {event.ticketLink && (
+                    <div className="mt-6">
+                      <a
+                        href={event.ticketLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                      >
+                        Book Tickets
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

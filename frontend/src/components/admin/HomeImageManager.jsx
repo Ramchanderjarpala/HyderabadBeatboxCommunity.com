@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function GalleryManager() {
+function HomeImageManager() {
   const [images, setImages] = useState([]);
-  const [newImage, setNewImage] = useState({
-    image: "",
-    title: "",
-  });
+  const [newImage, setNewImage] = useState("");
 
   useEffect(() => {
     fetchImages();
@@ -15,7 +12,7 @@ function GalleryManager() {
   const fetchImages = async () => {
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/gallery`
+        `${import.meta.env.VITE_BACKEND_URL}/api/home-images`
       );
       setImages(data);
     } catch (error) {
@@ -28,19 +25,18 @@ function GalleryManager() {
     try {
       const token = localStorage.getItem("adminToken");
       await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/gallery`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/home-images`,
         {
-          image: newImage.image,
-          title: newImage.title,
+          image: newImage,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       fetchImages();
-      setNewImage({ image: "", title: "" });
+      setNewImage("");
     } catch (error) {
-      console.error("Error creating gallery item:", error);
+      console.error("Error creating home image:", error);
     }
   };
 
@@ -48,7 +44,7 @@ function GalleryManager() {
     try {
       const token = localStorage.getItem("adminToken");
       await axios.delete(
-        `${import.meta.env.VITE_BACKEND_URL}/api/gallery/${id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/home-images/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -64,16 +60,9 @@ function GalleryManager() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
-          value={newImage.image}
-          onChange={(e) => setNewImage({ ...newImage, image: e.target.value })}
+          value={newImage}
+          onChange={(e) => setNewImage(e.target.value)}
           placeholder="Image URL"
-          className="w-full p-2 bg-gray-800 text-white rounded"
-        />
-        <input
-          type="text"
-          value={newImage.title}
-          onChange={(e) => setNewImage({ ...newImage, title: e.target.value })}
-          placeholder="Image Title"
           className="w-full p-2 bg-gray-800 text-white rounded"
         />
         <button
@@ -89,10 +78,9 @@ function GalleryManager() {
           <div key={image._id} className="bg-gray-800 p-4 rounded">
             <img
               src={image.image}
-              alt={image.title}
+              alt="Home Image"
               className="w-full h-48 object-cover rounded"
             />
-            <p className="text-white mt-2">{image.title}</p>
             <button
               onClick={() => handleDelete(image._id)}
               className="bg-red-600 text-white px-2 py-1 rounded mt-2"
@@ -106,4 +94,4 @@ function GalleryManager() {
   );
 }
 
-export default GalleryManager;
+export default HomeImageManager;

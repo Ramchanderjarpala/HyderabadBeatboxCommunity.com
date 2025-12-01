@@ -11,6 +11,8 @@ import adminRoutes from './routes/adminRoutes.js';
 import eventRoutes from './routes/eventRoutes.js';
 import galleryRoutes from './routes/galleryRoutes.js';
 import videoRoutes from './routes/videoRoutes.js';
+import homeImageRoutes from './routes/homeImageRoutes.js';
+import blogRoutes from './routes/blogRoutes.js';
 
 dotenv.config();
 connectDB();
@@ -46,6 +48,8 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/events', cacheMiddleware('events'), eventRoutes);
 app.use('/api/gallery', cacheMiddleware('gallery'), galleryRoutes);
 app.use('/api/videos', cacheMiddleware('videos'), videoRoutes);
+app.use('/api/home-images', cacheMiddleware('home-images'), homeImageRoutes);
+app.use('/api/blogs', blogRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

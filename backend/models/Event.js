@@ -23,6 +23,10 @@ const eventSchema = new mongoose.Schema({
   image: {
     type: String,
     default: ''
+  },
+  ticketLink: {
+    type: String,
+    default: ''
   }
 }, {
   timestamps: true

@@ -14,18 +14,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Public routes
-// Create a new event including image data in base64 format
-router.post('/', async (req, res) => {
-  const { title, description, date, image, details, location } = req.body;
-  try {
-    const event = new Event({ title, description, date, image, details, location });
-    const createdEvent = await event.save();
-    res.status(201).json(createdEvent);
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to create event', error });
-  }
-});
+
 router.post('/', protect, async (req, res) => {
   try {
     const event = await Event.create(req.body);

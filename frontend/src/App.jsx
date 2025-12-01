@@ -14,7 +14,6 @@ import WriteBlog from "./components/WriteBlog";
 import BlogDetail from "./components/BlogDetail";
 import AdminLogin from "./components/admin/AdminLogin";
 import AdminDashboard from "./components/admin/AdminDashboard";
-import axios from "axios";
 
 function ImageCarousel() {
   const [currentImage, setCurrentImage] = React.useState(0);
@@ -22,31 +21,25 @@ function ImageCarousel() {
   const [isCarouselVisible, setIsCarouselVisible] = React.useState(false);
 
   React.useEffect(() => {
-    const fetchAndPreloadImages = async () => {
-      try {
-        const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/home-images`
-        );
-        const imageUrls = data.map(
-          (image) => `${image.image}?tr=w-1920,h-1080,q-80`
-        );
+    const localImages = [
+      "/home1.webp",
+      "/home2.webp",
+      "/home3.webp",
+      "/home4.webp",
+      "/Home5.webp",
+      "/Home6.webp",
+    ];
 
-        if (imageUrls.length > 0) {
-          const firstImage = new Image();
-          firstImage.src = imageUrls[0];
-          firstImage.onload = () => {
-            setImages(imageUrls);
-            setIsCarouselVisible(true);
-          };
-        } else {
-          setIsCarouselVisible(true);
-        }
-      } catch (error) {
-        console.error("Error fetching images:", error);
+    if (localImages.length > 0) {
+      const firstImage = new Image();
+      firstImage.src = localImages[0];
+      firstImage.onload = () => {
+        setImages(localImages);
         setIsCarouselVisible(true);
-      }
-    };
-    fetchAndPreloadImages();
+      };
+    } else {
+      setIsCarouselVisible(true);
+    }
   }, []);
 
   React.useEffect(() => {

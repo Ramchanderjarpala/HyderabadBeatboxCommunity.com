@@ -150,3 +150,17 @@ body::-webkit-scrollbar {
   0% { transform: translateX(100%); }
   100% { transform: translateX(-100%); }
 } */
+
+.animate-gradient-loader {
+  animation: animate-gradient-loader 5s linear infinite;
+  background-size: 200% 200%;
+}
+
+@keyframes animate-gradient-loader {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}

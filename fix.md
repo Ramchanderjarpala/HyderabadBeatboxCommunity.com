@@ -1,0 +1,2 @@
+--there is an home-images backen route that can be used to uplad imges fomr admin pannel and store images in db and can be used to display images on frontend with api call -for now for home bg images we are using from public dorectory
+-optimize website

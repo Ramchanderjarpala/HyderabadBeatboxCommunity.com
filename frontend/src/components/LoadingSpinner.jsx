@@ -1,39 +1,10 @@
 import React, { useEffect, useState } from "react";
+import "../index.css";
 
-const LoadingSpinner = ({ size = "medium" }) => {
-  const sizeClasses = {
-    small: "text-sm",
-    medium: "text-base",
-    large: "text-lg",
-  };
-
-  const finalText = "3 2 1 Beatbox!";
-  const [displayText, setDisplayText] = useState("");
-
-  useEffect(() => {
-    let interval;
-    let iteration = 0;
-
-    interval = setInterval(() => {
-      setDisplayText(() => {
-        if (iteration > finalText.length) {
-          iteration = 0;
-        }
-
-        const newText = finalText.slice(0, iteration);
-        iteration++;
-        return newText;
-      });
-    }, 300);
-
-    return () => clearInterval(interval);
-  }, []);
-
+const LoadingSpinner = () => {
   return (
-    <div className="flex flex-col items-center justify-center py-8">
-      <p className={`${sizeClasses[size]} font-poppins text-gray-400`}>
-        {displayText}
-      </p>
+    <div className="font-4xl bg-gradient-to-r from-black via-white to-black bg-[200%] bg-[length:200%_200%] bg-clip-text text-transparent [text-fill-color:transparent] animate-gradient-loader [-webkit-text-fill-color:transparent] [-webkit-background-clip:text]">
+      3 2 1 Beatbox...
     </div>
   );
 };

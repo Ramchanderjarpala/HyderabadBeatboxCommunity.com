@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams, Link } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
+import { Link, useParams } from "react-router-dom";
 import Section from "./Section";
 import LoadingSpinner from "./LoadingSpinner";
 
@@ -29,7 +30,7 @@ function BlogDetail() {
     return (
       <Section className="py-16 md:py-32">
         <div className="flex justify-center">
-          <LoadingSpinner size="large" text="Loading blog post..." />
+          <LoadingSpinner />
         </div>
       </Section>
     );
@@ -46,26 +47,33 @@ function BlogDetail() {
   }
 
   return (
-    <Section className="py-16 md:py-32 ">
-      <Link to="/" className="text-blue-500 hover:underline p-20">
-        &larr; Back to Home
-      </Link>
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 text-center gradient-text">
-            {blog.title}
-          </h1>
-          <p className="text-center text-white/60 mb-8">
-            By {blog.author} on {new Date(blog.createdAt).toLocaleDateString()}
-          </p>
-          <img
-            src={blog.image}
-            alt={blog.title}
-            className="w-full h-auto object-cover rounded-lg mb-8"
-          />
-          <div className="prose prose-invert max-w-none text-white/80 text-lg">
-            {blog.content}
-          </div>
+    <Section className="py-2 md:py-4 ">
+      <div className="container mx-auto px-4 md:px-10">
+        <div className="mb-8">
+          <Link to="/" className="text-blue-500 hover:underline">
+            &larr; Back to Home
+          </Link>
+        </div>
+
+        <img
+          src={
+            blog.image.startsWith("data:image")
+              ? blog.image
+              : `${blog.image}?tr=w-1200,q-80`
+          }
+          alt={blog.title}
+          className="h-auto max-h-[500px] object-cover rounded-lg mb-8 shadow-lg mx-auto"
+        />
+
+        <h1 className="text-4xl md:text-6xl font-bold mb-4 text-center gradient-text">
+          {blog.title}
+        </h1>
+        <p className="text-center text-white/60 mb-8">
+          By {blog.author} on {new Date(blog.createdAt).toLocaleDateString()}
+        </p>
+
+        <div className="prose prose-sm md:prose-lg prose-invert max-w-none text-white/80 mx-auto">
+          <ReactMarkdown>{blog.content}</ReactMarkdown>
         </div>
       </div>
     </Section>

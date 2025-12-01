@@ -10,6 +10,7 @@ function WriteBlog() {
   const [author, setAuthor] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleImageUpload = (e) => {
@@ -30,6 +31,9 @@ function WriteBlog() {
       return;
     }
 
+    setLoading(true);
+    setError("");
+
     try {
       await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/blogs`, {
         title,
@@ -38,7 +42,6 @@ function WriteBlog() {
         author,
       });
       setSuccess("Blog post submitted for approval!");
-      setError("");
       setTitle("");
       setContent("");
       setImage("");
@@ -47,6 +50,8 @@ function WriteBlog() {
     } catch (err) {
       setError("Failed to submit blog post. Please try again.");
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -113,9 +118,10 @@ function WriteBlog() {
           <div className="text-center">
             <button
               type="submit"
-              className="px-8 py-4 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 transition-colors duration-300"
+              className="px-8 py-4 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 transition-colors duration-300 disabled:bg-gray-400"
+              disabled={loading}
             >
-              Submit for Approval
+              {loading ? "Submitting..." : "Submit for Approval"}
             </button>
           </div>
         </form>

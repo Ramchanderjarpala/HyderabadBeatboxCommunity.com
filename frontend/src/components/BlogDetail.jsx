@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Section from "./Section";
 import LoadingSpinner from "./LoadingSpinner";
 
@@ -47,6 +47,9 @@ function BlogDetail() {
 
   return (
     <Section className="py-16 md:py-32 ">
+      <Link to="/" className="text-blue-500 hover:underline p-20">
+        &larr; Back to Home
+      </Link>
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 text-center gradient-text">

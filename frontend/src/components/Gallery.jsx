@@ -56,7 +56,39 @@ function Gallery() {
       <h2 className="text-4xl md:text-5xl font-bold mb-8 md:mb-16 text-center gradient-text">
         Gallery
       </h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-2 md:gap-4 p-4">
+      {/* Mobile Layout */}
+      <div className="md:hidden p-4">
+        {visibleImages.length > 0 && (
+          <div
+            className="cursor-pointer mb-2"
+            onClick={() => setSelectedImage(visibleImages[0])}
+          >
+            <img
+              src={visibleImages[0].original}
+              alt={visibleImages[0].description}
+              className="object-cover w-full h-auto rounded-lg"
+            />
+          </div>
+        )}
+        <div className="grid grid-cols-3 gap-2">
+          {visibleImages.slice(1, 7).map((image, index) => (
+            <div
+              key={index}
+              className="aspect-w-1 aspect-h-1 cursor-pointer"
+              onClick={() => setSelectedImage(image)}
+            >
+              <img
+                src={image.original}
+                alt={image.description}
+                className="object-cover w-full h-full rounded-lg"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden md:grid grid-cols-3 gap-4 p-4">
         {visibleImages.map((image, index) => (
           <div
             key={index}

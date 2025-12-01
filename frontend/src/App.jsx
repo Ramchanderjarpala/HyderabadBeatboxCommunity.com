@@ -19,23 +19,36 @@ import axios from "axios";
 function ImageCarousel() {
   const [currentImage, setCurrentImage] = React.useState(0);
   const [images, setImages] = React.useState([]);
+  const [isCarouselVisible, setIsCarouselVisible] = React.useState(false);
 
   React.useEffect(() => {
-    const fetchImages = async () => {
+    const fetchAndPreloadImages = async () => {
       try {
         const { data } = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/home-images`
         );
-        setImages(data.map((image) => image.image));
+        const imageUrls = data.map((image) => image.image);
+
+        if (imageUrls.length > 0) {
+          const firstImage = new Image();
+          firstImage.src = imageUrls[0];
+          firstImage.onload = () => {
+            setImages(imageUrls);
+            setIsCarouselVisible(true);
+          };
+        } else {
+          setIsCarouselVisible(true);
+        }
       } catch (error) {
         console.error("Error fetching images:", error);
+        setIsCarouselVisible(true);
       }
     };
-    fetchImages();
+    fetchAndPreloadImages();
   }, []);
 
   React.useEffect(() => {
-    if (images.length === 0) return;
+    if (images.length < 2) return;
     const timer = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % images.length);
     }, 5000);
@@ -43,22 +56,28 @@ function ImageCarousel() {
   }, [images]);
 
   return (
-    <div id="home" className="relative h-screen overflow-hidden">
-      {images.map((src, index) => (
-        <div
-          key={src}
-          className={`absolute inset-0 transition-opacity duration-1000 ${
-            index === currentImage ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <img
-            src={src}
-            alt="Landscape"
-            className="w-full h-full object-cover"
-          />
-          <div className="hero-gradient absolute inset-0" />
-        </div>
-      ))}
+    <div id="home" className="relative h-screen overflow-hidden bg-black">
+      <div
+        className={`absolute inset-0 transition-opacity duration-1000 ${
+          isCarouselVisible ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        {images.map((src, index) => (
+          <div
+            key={src}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              index === currentImage ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <img
+              src={src}
+              alt="Landscape"
+              className="w-full h-full object-cover"
+            />
+            <div className="hero-gradient absolute inset-0" />
+          </div>
+        ))}
+      </div>
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-center p-8 max-w-5xl mt-80">
           <LuMicVocal className="w-16 h-16 mx-auto mb-6 text-white animate-pulse" />
@@ -86,18 +105,6 @@ function MainLayout() {
       <OurClients />
       <Blog />
       <Contact />
-      {/* <footer className="glass-effect py-8 px-4 text-center text-sm text-white/60">
-        <p>© 2024 Hyderabad Beatbox Community. All rights reserved.</p>
-        <div className="text-center text-white/40 text-[10px]">
-          <ReactTypingEffect
-            text={["Developed by X Boy"]}
-            speed={100}
-            eraseDelay={2000}
-            typingDelay={1000}
-            cursorRenderer={(cursor) => <span>{cursor}</span>}
-          />
-        </div>
-      </footer> */}
     </div>
   );
 }

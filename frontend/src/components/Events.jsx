@@ -178,61 +178,62 @@ function Events() {
   };
 
   return (
-    <Section id="events" className="section-padding relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/home1.webp')] bg-cover bg-center opacity-10" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-black/95 to-black" />
+    <>
+      <Section id="events" className="section-padding relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/home1.webp')] bg-cover bg-center opacity-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/95 to-black" />
 
-      <div className="container-width relative z-10">
-        <h2 className="section-title text-center">Upcoming Events</h2>
+        <div className="container-width relative z-10">
+          <h2 className="section-title text-center">Upcoming Events</h2>
 
-        <div className="mb-16 text-center">
-          <p className="text-[#0066FF] mb-4">NEXT EVENT</p>
-          <CountdownTimer targetDate="2025-03-23T16:00:00" />
-        </div>
-
-        {loading ? (
-          <div className="flex justify-center">
-            <LoadingSpinner />
+          <div className="mb-16 text-center">
+            <p className="text-[#0066FF] mb-4">NEXT EVENT</p>
+            <CountdownTimer targetDate="2025-03-23T16:00:00" />
           </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {events.map((event) => (
-              <motion.button
-                key={event._id}
-                className="bg-[#111] rounded-lg p-6 text-left hover:bg-[#222] transition-colors cursor-pointer border border-white/10 hover:border-[#0066FF]/50 w-full"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setSelectedEvent(event)}
-              >
-                {event.image && (
-                  <img
-                    src={event.image}
-                    alt="Event"
-                    className="w-full h-48 object-cover rounded mb-4"
-                  />
-                )}
-                <h3 className="text-lg font-semibold mb-2 text-center">
-                  {event.title}
-                </h3>
-                <div className="flex items-center justify-center text-[#0066FF] text-sm mb-2">
-                  <Clock className="w-4 h-4 mr-2 flex-shrink-0" />
-                  <span className="truncate">{event.date}</span>
-                </div>
-              </motion.button>
-            ))}
-          </div>
-        )}
 
-        <AnimatePresence>
-          {selectedEvent && (
-            <EventModal
-              event={selectedEvent}
-              onClose={() => setSelectedEvent(null)}
-            />
+          {loading ? (
+            <div className="flex justify-center">
+              <LoadingSpinner />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {events.map((event) => (
+                <motion.button
+                  key={event._id}
+                  className="bg-[#111] rounded-lg p-6 text-left hover:bg-[#222] transition-colors cursor-pointer border border-white/10 hover:border-[#0066FF]/50 w-full"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setSelectedEvent(event)}
+                >
+                  {event.image && (
+                    <img
+                      src={event.image}
+                      alt="Event"
+                      className="w-full h-48 object-cover rounded mb-4"
+                    />
+                  )}
+                  <h3 className="text-lg font-semibold mb-2 text-center">
+                    {event.title}
+                  </h3>
+                  <div className="flex items-center justify-center text-[#0066FF] text-sm mb-2">
+                    <Clock className="w-4 h-4 mr-2 flex-shrink-0" />
+                    <span className="truncate">{event.date}</span>
+                  </div>
+                </motion.button>
+              ))}
+            </div>
           )}
-        </AnimatePresence>
-      </div>
-    </Section>
+        </div>
+      </Section>
+      <AnimatePresence>
+        {selectedEvent && (
+          <EventModal
+            event={selectedEvent}
+            onClose={() => setSelectedEvent(null)}
+          />
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 

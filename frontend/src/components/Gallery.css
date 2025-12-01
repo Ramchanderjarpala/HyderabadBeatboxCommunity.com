@@ -9,11 +9,26 @@
 }
 
 @media (max-width: 768px) {
-  .gallery-modal .image-gallery-slide {
-    height: calc(100vh - 80px); /* Adjust based on thumbnail height */
+  .mobile-gallery .image-gallery-content {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
-  .gallery-modal .image-gallery-thumbnails-wrapper {
+  .mobile-gallery .image-gallery-slide-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-gallery .image-gallery-thumbnails-wrapper {
     height: 80px;
+    flex-shrink: 0;
+  }
+
+  .mobile-gallery .image-gallery-image {
+    max-height: 100%;
+    object-fit: contain;
   }
 }

@@ -52,7 +52,7 @@ function Blog() {
                 className="bg-[#111] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
               >
                 <img
-                  src={blog.image}
+                  src={`${blog.image}?tr=h-224,q-80`}
                   alt={blog.title}
                   className="w-full h-56 object-cover"
                 />

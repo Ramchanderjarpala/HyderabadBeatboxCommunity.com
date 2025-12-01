@@ -25,7 +25,9 @@ function Header() {
         behavior: "smooth",
       });
     }
-    setIsMobileMenuOpen(false);
+    setTimeout(() => {
+      setIsMobileMenuOpen(false);
+    }, 300); // Add a delay to allow scroll to start
   };
 
   return (
@@ -43,7 +45,7 @@ function Header() {
           alt="Logo"
         />
 
-        <div className="hidden md:flex space-x-12 mr-11">
+        <div className="hidden lg:flex space-x-12 mr-11">
           {[
             "home",
             "about",
@@ -65,7 +67,7 @@ function Header() {
 
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="md:hidden text-white/80 hover:text-white"
+          className="lg:hidden text-white/80 hover:text-white"
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -77,7 +79,7 @@ function Header() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass-effect"
+            className="lg:hidden glass-effect"
           >
             <div className="py-4 px-4 space-y-4">
               {[

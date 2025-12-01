@@ -12,7 +12,10 @@ import ReactTypingEffect from "react-typing-effect";
 
 function Contact() {
   return (
-    <footer className=" text-white flex flex-col items-center py-4">
+    <footer
+      id="contact"
+      className=" text-white flex flex-col items-center py-4"
+    >
       <div className="px-4 flex flex-col items-center">
         <img src="/hbx3.png" alt="BBX Icon" className="w-40 h-40 " />
         <div className="flex space-x-6 -mt-10 mr-2  mb-2">

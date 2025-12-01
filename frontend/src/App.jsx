@@ -27,7 +27,9 @@ function ImageCarousel() {
         const { data } = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/home-images`
         );
-        const imageUrls = data.map((image) => image.image);
+        const imageUrls = data.map(
+          (image) => `${image.image}?tr=w-1920,h-1080,q-80`
+        );
 
         if (imageUrls.length > 0) {
           const firstImage = new Image();
@@ -64,7 +66,7 @@ function ImageCarousel() {
       >
         {images.map((src, index) => (
           <div
-            key={src}
+            key={`${src}-${index}`}
             className={`absolute inset-0 transition-opacity duration-1000 ${
               index === currentImage ? "opacity-100" : "opacity-0"
             }`}

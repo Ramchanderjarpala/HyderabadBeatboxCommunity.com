@@ -25,7 +25,8 @@ function Gallery() {
       );
       const formattedImages = data.map((image) => ({
         original: image.image,
-        thumbnail: image.image,
+        thumbnail: `${image.image}?tr=w-150,h-100`,
+        gridImage: `${image.image}?tr=w-600,h-600,c-at_max,q-80`,
         description: image.title,
       }));
       setImages(formattedImages);
@@ -58,32 +59,34 @@ function Gallery() {
       </h2>
       {/* Mobile Layout */}
       <div className="md:hidden p-4">
-        {visibleImages.length > 0 && (
-          <div
-            className="cursor-pointer mb-2"
-            onClick={() => setSelectedImage(visibleImages[0])}
-          >
-            <img
-              src={visibleImages[0].original}
-              alt={visibleImages[0].description}
-              className="object-cover w-full h-auto rounded-lg"
-            />
-          </div>
-        )}
-        <div className="grid grid-cols-3 gap-2">
-          {visibleImages.slice(1, 7).map((image, index) => (
+        <div className="flex flex-col items-center">
+          {visibleImages.length > 0 && (
             <div
-              key={index}
-              className="aspect-w-1 aspect-h-1 cursor-pointer"
-              onClick={() => setSelectedImage(image)}
+              className="cursor-pointer mb-2 w-full"
+              onClick={() => setSelectedImage(visibleImages[0])}
             >
               <img
-                src={image.original}
-                alt={image.description}
-                className="object-cover w-full h-full rounded-lg"
+                src={visibleImages[0].gridImage}
+                alt={visibleImages[0].description}
+                className="object-cover w-full h-auto rounded-lg"
               />
             </div>
-          ))}
+          )}
+          <div className="grid grid-cols-3 gap-2 w-full">
+            {visibleImages.slice(1, 7).map((image, index) => (
+              <div
+                key={index}
+                className="aspect-w-1 aspect-h-1 cursor-pointer"
+                onClick={() => setSelectedImage(image)}
+              >
+                <img
+                  src={image.gridImage}
+                  alt={image.description}
+                  className="object-cover w-full h-full rounded-lg"
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -96,7 +99,7 @@ function Gallery() {
             onClick={() => setSelectedImage(image)}
           >
             <img
-              src={image.original}
+              src={image.gridImage}
               alt={image.description}
               className="object-cover w-full h-full rounded-lg"
             />
@@ -126,6 +129,7 @@ function Gallery() {
               items={images}
               thumbnailPosition="bottom"
               showPlayButton={false}
+              additionalClass="mobile-gallery"
             />
           </div>
         </div>

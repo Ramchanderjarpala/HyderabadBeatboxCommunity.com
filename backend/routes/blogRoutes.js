@@ -18,22 +18,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-// @route   GET /api/blogs/:id
-// @desc    Get a single blog post by ID
-// @access  Public
-router.get('/:id', async (req, res) => {
-    try {
-        const blog = await Blog.findById(req.params.id);
-        if (blog) {
-            res.json(blog);
-        } else {
-            res.status(404).json({ message: 'Blog not found' });
-        }
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
-
 // @route   GET /api/blogs
 // @desc    Get all approved blog posts
 // @access  Public
@@ -65,6 +49,22 @@ router.get('/pending', protect, async (req, res) => {
     try {
         const pendingBlogs = await Blog.find({ status: 'pending' }).sort({ createdAt: -1 });
         res.json(pendingBlogs);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// @route   GET /api/blogs/:id
+// @desc    Get a single blog post by ID
+// @access  Public
+router.get('/:id', async (req, res) => {
+    try {
+        const blog = await Blog.findById(req.params.id);
+        if (blog) {
+            res.json(blog);
+        } else {
+            res.status(404).json({ message: 'Blog not found' });
+        }
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

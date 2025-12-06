@@ -24,7 +24,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 app.use(helmet());
 app.use(compression());
 app.use(cors({
-  origin: ['https://hyderabad-beatbox-community-client.vercel.app', 'http://localhost:5173'],
+  origin: [`${process.env.FRONTEND_URL}`, 'https://www.hyderabadbeatboxcommunity.in', 'http://localhost:5173'],
   credentials: true
 }));
 

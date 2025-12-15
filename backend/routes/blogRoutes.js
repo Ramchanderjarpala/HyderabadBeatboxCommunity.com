@@ -23,7 +23,16 @@ router.post('/', async (req, res) => {
 // @access  Public
 router.get('/', async (req, res) => {
     try {
-        const blogs = await Blog.find({ status: 'approved' }).sort({ createdAt: -1 });
+        const limit = parseInt(req.query.limit);
+        let query = Blog.find({ status: 'approved' }).sort({ createdAt: -1 });
+
+        if (limit && limit > 0) {
+            query = query.limit(limit);
+        }
+
+        const blogs = await query;
+        // Optimization: if list view, optionally truncate content here? 
+        // For now, rely on limit and cache.
         res.json(blogs);
     } catch (error) {
         res.status(500).json({ message: error.message });

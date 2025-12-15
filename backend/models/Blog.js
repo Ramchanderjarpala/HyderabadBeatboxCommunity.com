@@ -29,4 +29,7 @@ const blogSchema = new mongoose.Schema(
 
 const Blog = mongoose.model('Blog', blogSchema);
 
+// Add index for sorting by createdAt
+blogSchema.index({ createdAt: -1 });
+
 export default Blog;

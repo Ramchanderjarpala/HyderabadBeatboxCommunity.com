@@ -18,4 +18,8 @@ const videoSchema = new mongoose.Schema({
 });
 
 const Video = mongoose.model('Video', videoSchema);
+
+// Add index for sorting by createdAt
+videoSchema.index({ createdAt: -1 });
+
 export default Video;

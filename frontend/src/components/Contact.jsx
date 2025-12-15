@@ -17,10 +17,10 @@ function Contact() {
       className=" text-white flex flex-col items-center py-4"
     >
       <div className="px-4 flex flex-col items-center">
-        <img src="/hbx3.png" alt="BBX Icon" className="w-40 h-40 " />
+        <img src="https://ik.imagekit.io/qci75z79t/BBx%20Home%20Pics/hbx3.png" alt="BBX Icon" className="w-40 h-40 " />
         <div className="flex space-x-6 -mt-10 mr-2  mb-2">
           <a
-            href="https://instagram.com"
+            href="https://www.instagram.com/hydbeatboxcommunity/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-white"
@@ -28,7 +28,7 @@ function Contact() {
             <RiInstagramLine className="w-6 h-6" />
           </a>
           <a
-            href="https://wa.me/"
+            href="https://chat.whatsapp.com/DPog876RSEyFJOHhgB98Ty?mode=hqrc"
             target="_blank"
             rel="noopener noreferrer"
             className="text-white"
@@ -36,7 +36,7 @@ function Contact() {
             <RiWhatsappLine className="w-6 h-6" />
           </a>
           <a
-            href="https://discord.com"
+            href="https://discord.gg/XPsK8Jknj"
             target="_blank"
             rel="noopener noreferrer"
             className="text-white"

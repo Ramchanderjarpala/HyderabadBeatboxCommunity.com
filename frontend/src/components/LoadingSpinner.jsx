@@ -8,7 +8,7 @@ const LoadingSpinner = () => {
         3 2 1 Beatbox...
       </div>
       <div className="ml-3">
-        <div class="inline-block w-3 h-3 rounded-full border border-gray-300 border-t-transparent animate-spin"></div>
+        <div className="inline-block w-3 h-3 rounded-full border border-gray-300 border-t-transparent animate-spin"></div>
       </div>
     </div>
   );

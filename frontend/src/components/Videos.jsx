@@ -10,17 +10,32 @@ function Videos() {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [isAllLoaded, setIsAllLoaded] = useState(false);
+
   useEffect(() => {
-    fetchVideos();
+    fetchVideos(6);
   }, []);
 
-  const fetchVideos = async () => {
+  const fetchVideos = async (limit = null) => {
     try {
-      setLoading(true);
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/videos`
-      );
-      setVideos(data);
+      if (limit) setLoading(true);
+      
+      // Request one extra item to check if there are more
+      const queryLimit = limit ? limit + 1 : null;
+      
+      const url = queryLimit 
+        ? `${import.meta.env.VITE_BACKEND_URL}/api/videos?limit=${queryLimit}`
+        : `${import.meta.env.VITE_BACKEND_URL}/api/videos`;
+        
+      const { data } = await axios.get(url);
+      
+      if (limit && data.length > limit) {
+        setVideos(data.slice(0, limit));
+        setIsAllLoaded(false);
+      } else {
+        setVideos(data);
+        setIsAllLoaded(true);
+      }
     } catch (error) {
       console.error("Error fetching videos:", error);
     } finally {
@@ -77,6 +92,16 @@ function Videos() {
             </motion.div>
           ))}
         </div>
+        {!isAllLoaded && (
+          <div className="text-center mt-12">
+            <button
+              onClick={() => fetchVideos()}
+              className="px-4 py-2 bg-white/10 border border-white/10 text-white rounded-lg font-bold hover:bg-white/20 transition-colors duration-300"
+            >
+              View all Videos
+            </button>
+          </div>
+        )}
       </div>
 
       <AnimatePresence>

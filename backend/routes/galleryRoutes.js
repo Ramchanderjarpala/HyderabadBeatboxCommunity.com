@@ -7,7 +7,14 @@ const router = express.Router();
 // Public routes
 router.get('/', async (req, res) => {
   try {
-    const images = await Gallery.find({});
+    const limit = parseInt(req.query.limit);
+    let query = Gallery.find({}).sort({ createdAt: -1 });
+
+    if (limit && limit > 0) {
+      query = query.limit(limit);
+    }
+
+    const images = await query;
     res.json(images);
   } catch (error) {
     res.status(500).json({ message: error.message });

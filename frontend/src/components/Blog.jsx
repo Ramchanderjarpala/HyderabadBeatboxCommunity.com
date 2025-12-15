@@ -4,25 +4,40 @@ import { Link } from "react-router-dom";
 import Section from "./Section";
 import LoadingSpinner from "./LoadingSpinner";
 
-function Blog() {
+function Blog({ initialLimit = null }) {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/blogs`
-        );
-        setBlogs(data);
-      } catch (error) {
-        console.error("Error fetching blogs:", error);
-      }
-      setLoading(false);
-    };
+  const [hasMore, setHasMore] = useState(false);
 
-    fetchBlogs();
-  }, []);
+  const fetchBlogs = async (limit = null) => {
+    try {
+      if (limit) setLoading(true);
+      
+      const queryLimit = limit ? limit + 1 : null;
+      
+      const url = queryLimit 
+        ? `${import.meta.env.VITE_BACKEND_URL}/api/blogs?limit=${queryLimit}`
+        : `${import.meta.env.VITE_BACKEND_URL}/api/blogs`;
+        
+      const { data } = await axios.get(url);
+      
+      if (limit && data.length > limit) {
+        setBlogs(data.slice(0, limit));
+        setHasMore(true);
+      } else {
+        setBlogs(data);
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("Error fetching blogs:", error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchBlogs(initialLimit);
+  }, [initialLimit]);
 
   if (loading) {
     return (
@@ -72,10 +87,18 @@ function Blog() {
               </Link>
             ))}
           </div>
-          <div className="text-center mt-12">
+          <div className="text-center mt-8 space-x-4">
+            {initialLimit && hasMore && (
+              <Link
+                to="/blog"
+                className="inline-block px-8 py-4 bg-white/10 border border-white/10 text-white rounded-full font-bold hover:bg-white/20 transition-colors duration-300"
+              >
+                View all Blogs
+              </Link>
+            )}
             <Link
               to="/write-blog"
-              className="px-8 py-4 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 transition-colors duration-300"
+              className="inline-block px-8 py-4 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 transition-colors duration-300"
             >
               Write a Blog Post
             </Link>

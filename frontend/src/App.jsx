@@ -24,10 +24,13 @@ function ImageCarousel() {
     const localImages = [
       "/home1.webp",
       "/home2.webp",
-      "/home3.webp",
-      "/home4.webp",
-      "/Home5.webp",
-      "/Home6.webp",
+      "https://ik.imagekit.io/qci75z79t/BBx%20Home%20Pics/IMG_7329.JPG?updatedAt=1764590542631",
+      "https://ik.imagekit.io/qci75z79t/BBx%20Home%20Pics/Home%20pics/home3.webp?updatedAt=1764590230088",
+      "https://ik.imagekit.io/qci75z79t/BBx%20Home%20Pics/Home%20pics/home4.webp?updatedAt=1764590230634",
+      "https://ik.imagekit.io/qci75z79t/BBx%20Home%20Pics/Home%20pics/Home5.webp?updatedAt=1764590230074",
+      "https://ik.imagekit.io/qci75z79t/BBx%20Home%20Pics/Home%20pics/Home6.webp?updatedAt=1764590230078"
+
+
     ];
 
     if (localImages.length > 0) {
@@ -98,7 +101,7 @@ function MainLayout() {
       <Gallery />
       <Videos />
       <OurClients />
-      <Blog />
+      <Blog initialLimit={6} />
       <Contact />
     </div>
   );

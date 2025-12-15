@@ -15,7 +15,14 @@ const getYouTubeVideoId = (url) => {
 // Public routes
 router.get('/', async (req, res) => {
   try {
-    const videos = await Video.find({});
+    const limit = parseInt(req.query.limit);
+    let query = Video.find({}).sort({ createdAt: -1 });
+
+    if (limit && limit > 0) {
+      query = query.limit(limit);
+    }
+
+    const videos = await query;
     res.json(videos);
   } catch (error) {
     res.status(500).json({ message: error.message });

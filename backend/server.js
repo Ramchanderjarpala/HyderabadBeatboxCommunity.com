@@ -35,21 +35,28 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 const cache = new NodeCache({ stdTTL: 300 }); // 5 minutes cache
 
 // Cache middleware
-const cacheMiddleware = (key) => (req, res, next) => {
+// Cache middleware
+const cacheMiddleware = () => (req, res, next) => {
+  const key = req.originalUrl;
   const cached = cache.get(key);
   if (cached) {
     return res.json(cached);
   }
+  res.sendResponse = res.json;
+  res.json = (body) => {
+    cache.set(key, body);
+    res.sendResponse(body);
+  };
   next();
 };
 
 // Routes with caching
 app.use('/api/admin', adminRoutes);
-app.use('/api/events', cacheMiddleware('events'), eventRoutes);
-app.use('/api/gallery', cacheMiddleware('gallery'), galleryRoutes);
-app.use('/api/videos', cacheMiddleware('videos'), videoRoutes);
-app.use('/api/home-images', cacheMiddleware('home-images'), homeImageRoutes);
-app.use('/api/blogs', blogRoutes);
+app.use('/api/events', cacheMiddleware(), eventRoutes);
+app.use('/api/gallery', cacheMiddleware(), galleryRoutes);
+app.use('/api/videos', cacheMiddleware(), videoRoutes);
+app.use('/api/home-images', cacheMiddleware(), homeImageRoutes);
+app.use('/api/blogs', cacheMiddleware(), blogRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

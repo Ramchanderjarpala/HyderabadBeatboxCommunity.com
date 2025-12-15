@@ -14,15 +14,17 @@ function Gallery() {
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    fetchImages();
+    fetchImages(9);
   }, []);
 
-  const fetchImages = async () => {
+  const fetchImages = async (limit = null) => {
     try {
-      setLoading(true);
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/gallery`
-      );
+      if (limit) setLoading(true); // Only show full loader on initial load
+      const url = limit 
+        ? `${import.meta.env.VITE_BACKEND_URL}/api/gallery?limit=${limit}`
+        : `${import.meta.env.VITE_BACKEND_URL}/api/gallery`;
+
+      const { data } = await axios.get(url);
       const formattedImages = data.map((image) => ({
         original: image.image,
         thumbnail: `${image.image}?tr=w-150,h-100`,
@@ -52,13 +54,18 @@ function Gallery() {
 
   const visibleImages = images.slice(0, 9);
 
+  const handleViewMore = async () => {
+    await fetchImages(); // Fetch all
+    setShowGallery(true);
+  };
+
   return (
     <Section id="gallery" className="py-16 md:py-32">
       <h2 className="text-4xl md:text-5xl font-bold mb-8 md:mb-16 text-center gradient-text">
         Gallery
       </h2>
       {/* Mobile Layout */}
-      <div className="md:hidden p-4">
+      <div className="md:hidden px-4">
         <div className="flex flex-col items-center">
           {visibleImages.length > 0 && (
             <div
@@ -91,7 +98,7 @@ function Gallery() {
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden md:grid grid-cols-3 gap-4 p-4">
+      <div className="hidden md:grid grid-cols-4 gap-4 px-4">
         {visibleImages.map((image, index) => (
           <div
             key={index}
@@ -106,16 +113,15 @@ function Gallery() {
           </div>
         ))}
       </div>
-      {images.length > 9 && (
-        <div className="text-center mt-8">
+      {/* Always show View More if we loaded limits, or if we want to support full view */}
+       <div className="text-center mt-8">
           <button
-            onClick={() => setShowGallery(true)}
-            className="px-6 py-3 bg-blue-500 text-white rounded-lg"
+            onClick={handleViewMore}
+            className="px-4 py-2 bg-white/10 border border-white/10 text-white rounded-lg"
           >
             View More
           </button>
         </div>
-      )}
       {showGallery && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 gallery-modal">
           <div className="relative w-full h-full max-h-screen">

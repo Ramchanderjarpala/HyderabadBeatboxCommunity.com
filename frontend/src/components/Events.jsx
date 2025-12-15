@@ -160,16 +160,31 @@ function Events() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [isAllLoaded, setIsAllLoaded] = useState(false);
+
   useEffect(() => {
-    fetchEvents();
+    fetchEvents(6);
   }, []);
 
-  const fetchEvents = async () => {
+  const fetchEvents = async (limit = null) => {
     try {
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/events`
-      );
-      setEvents(data);
+      if (limit) setLoading(true);
+      
+      const queryLimit = limit ? limit + 1 : null;
+      
+      const url = queryLimit 
+        ? `${import.meta.env.VITE_BACKEND_URL}/api/events?limit=${queryLimit}`
+        : `${import.meta.env.VITE_BACKEND_URL}/api/events`;
+      
+      const { data } = await axios.get(url);
+      
+      if (limit && data.length > limit) {
+        setEvents(data.slice(0, limit));
+        setIsAllLoaded(false);
+      } else {
+        setEvents(data);
+        setIsAllLoaded(true);
+      }
     } catch (error) {
       console.error("Error fetching events:", error);
     } finally {
@@ -221,6 +236,17 @@ function Events() {
                   </div>
                 </motion.button>
               ))}
+            </div>
+          )}
+          
+          {!isAllLoaded && events.length > 3 && (
+            <div className="text-center mt-12">
+              <button
+                onClick={() => fetchEvents()}
+                className="px-4 py-2   bg-white/10 border border-white/10 text-white rounded-lg font-bold hover:bg-white/20 transition-colors duration-300"
+              >
+                View all Events
+              </button>
             </div>
           )}
         </div>

@@ -1,1 +1,3 @@
 -optimize website
+Code Splitting: Currently, the entire app loads at once. We could use React.lazy to load heavy pages (like /admin or /blog) only when the user visits them.
+Blog Images: Blog images are stored as Base64 strings in the database. This increases the database size and API response time significantly. It would be better to upload them to a service (like ImageKit, which you use for Gallery) and store only the URL.

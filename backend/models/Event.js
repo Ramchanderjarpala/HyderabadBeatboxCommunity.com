@@ -33,4 +33,8 @@ const eventSchema = new mongoose.Schema({
 });
 
 const Event = mongoose.model('Event', eventSchema);
+
+// Add index for sorting by createdAt
+eventSchema.index({ createdAt: -1 });
+
 export default Event;

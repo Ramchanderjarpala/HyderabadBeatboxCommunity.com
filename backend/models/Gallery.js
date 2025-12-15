@@ -14,4 +14,8 @@ const gallerySchema = new mongoose.Schema({
 });
 
 const Gallery = mongoose.model('Gallery', gallerySchema);
+
+// Add index for sorting by createdAt
+gallerySchema.index({ createdAt: -1 });
+
 export default Gallery;

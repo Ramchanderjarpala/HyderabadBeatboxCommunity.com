@@ -14,13 +14,13 @@ function Gallery() {
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    fetchImages(9);
+    fetchImages(8);
   }, []);
 
   const fetchImages = async (limit = null) => {
     try {
       if (limit) setLoading(true); // Only show full loader on initial load
-      const url = limit 
+      const url = limit
         ? `${import.meta.env.VITE_BACKEND_URL}/api/gallery?limit=${limit}`
         : `${import.meta.env.VITE_BACKEND_URL}/api/gallery`;
 
@@ -52,7 +52,7 @@ function Gallery() {
     );
   }
 
-  const visibleImages = images.slice(0, 9);
+  const visibleImages = images.slice(0, 8);
 
   const handleViewMore = async () => {
     await fetchImages(); // Fetch all
@@ -114,14 +114,14 @@ function Gallery() {
         ))}
       </div>
       {/* Always show View More if we loaded limits, or if we want to support full view */}
-       <div className="text-center mt-8">
-          <button
-            onClick={handleViewMore}
-            className="px-4 py-2 bg-white/10 border border-white/10 text-white rounded-lg"
-          >
-            View More
-          </button>
-        </div>
+      <div className="text-center mt-8">
+        <button
+          onClick={handleViewMore}
+          className="px-4 py-2 bg-white/10 border border-white/10 text-white rounded-lg"
+        >
+          View More
+        </button>
+      </div>
       {showGallery && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 gallery-modal">
           <div className="relative w-full h-full max-h-screen">

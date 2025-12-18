@@ -169,15 +169,15 @@ function Events() {
   const fetchEvents = async (limit = null) => {
     try {
       if (limit) setLoading(true);
-      
+
       const queryLimit = limit ? limit + 1 : null;
-      
-      const url = queryLimit 
+
+      const url = queryLimit
         ? `${import.meta.env.VITE_BACKEND_URL}/api/events?limit=${queryLimit}`
         : `${import.meta.env.VITE_BACKEND_URL}/api/events`;
-      
+
       const { data } = await axios.get(url);
-      
+
       if (limit && data.length > limit) {
         setEvents(data.slice(0, limit));
         setIsAllLoaded(false);
@@ -238,7 +238,7 @@ function Events() {
               ))}
             </div>
           )}
-          
+
           {!isAllLoaded && events.length > 3 && (
             <div className="text-center mt-12">
               <button
